@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TodoApp.Models.Todo>
+﻿
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -7,27 +7,3 @@
 <div class="text-center">
     <h1 class="display-4">Hoş geldiniz</h1>
 </div>
-<h2>Yapılacaklar</h2>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Tarih</th>
-            <th>Görev</th>
-            <th>Durumu</th>
-            
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var todo in Model)
-    {
-        <tr>
-             <td>@todo.Date.ToString("dd.MM.yyyy")</td>
-            <td>@todo.Title</td>
-            <td>
-            <input type="checkbox" @(todo.IsCompleted ? "checked" : "")  />
-        </td>
-        </tr>
-    }
-    </tbody>
-</table>

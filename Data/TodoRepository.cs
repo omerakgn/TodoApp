@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using TodoApp.Models;
 
@@ -23,7 +24,18 @@ namespace TodoApp.Data{
 
         public async Task<IEnumerable<Todo>> GetAllAsync()
         {
-            return await _context.Todo.ToListAsync();
+            return await _context.Todo.OrderBy(t => t.Date).ThenBy(t => t.Id) 
+            .ToListAsync();
+        }
+
+        public async Task<Todo> GetByIdAsync(Guid id)
+        {
+
+            var todo= await _context.Todo.FindAsync(id);
+            if(todo==null){
+                return null;
+            }
+            return todo;
         }
 
         public async Task SaveAsync()
@@ -31,10 +43,15 @@ namespace TodoApp.Data{
             await _context.SaveChangesAsync();
         }
 
-        public void Update(Todo entity)
+        public async Task Update(Todo entity)
         {
-            _context.Todo.Update(entity);
-        }
+          var existing = await _context.Todo.FindAsync(entity.Id);
+            if (existing != null)
+            {
+                existing.IsCompleted = entity.IsCompleted; // Sadece bu alanı güncelle
+                await _context.SaveChangesAsync();
+            }
+                }
     }
 
 

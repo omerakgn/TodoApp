@@ -1,0 +1,47 @@
+@model IEnumerable<TodoApp.Models.Todo>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+
+<div class="text-center">
+    <h1 class="display-4">Yapılacaklar</h1>
+</div>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tarih</th>
+            <th>Görev</th>
+            <th>Durumu</th>
+            <th>Sil</th>
+            
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var todo in Model)
+    {
+        <tr>
+            <td>@todo.Date.ToString("dd.MM.yyyy")</td>
+            <td>@todo.Title</td>
+            <td>
+             <form asp-action="UpdateStatus" method="post">
+                <input type="hidden" name="id" value="@todo.Id" />
+                <input type="checkbox" name="IsCompleted"
+                       onchange="this.form.submit()"
+                       @(todo.IsCompleted ? "checked" : "") />
+            </form>
+        </td>
+        <td>
+            
+            <form asp-action="Delete" method="post" asp-route-id="@todo.Id" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Silmek istediğine emin misin?');">
+                    Sil
+                 </button>
+</form>
+
+        </tr>
+    }
+    </tbody>
+</table>
